@@ -1,0 +1,187 @@
+name: bcex_master
+task-mode: all 
+is-sharding: false
+meta-schema: "dm_meta"
+remove-meta: false
+enable-heartbeat: false
+
+target-database:
+  host: "172.16.12.4"
+  port: 4000
+  user: "root"
+  password: ""
+
+mysql-instances:             
+  - source-id: "mysql-replica-02" 
+    black-white-list:  "global"
+    mydumper-config-name: "global"
+    loader-config-name: "global"
+    syncer-config-name: "global"
+    mydumper-thread: 4
+    loader-thread: 16
+    syncer-thread: 16
+    filter-rules: []
+    route-rules:
+    - mysql-replica-02.route_rules.1
+    - mysql-replica-02.route_rules.2
+    - mysql-replica-02.route_rules.3
+    - mysql-replica-02.route_rules.4
+    - mysql-replica-02.route_rules.5
+    - mysql-replica-02.route_rules.6
+    - mysql-replica-02.route_rules.7
+    - mysql-replica-02.route_rules.8
+    - mysql-replica-02.route_rules.9
+    - mysql-replica-02.route_rules.10
+    - mysql-replica-02.route_rules.11
+    - mysql-replica-02.route_rules.12
+    - mysql-replica-02.route_rules.13
+    - mysql-replica-02.route_rules.14
+    - mysql-replica-02.route_rules.15
+    - mysql-replica-02.route_rules.16
+    - mysql-replica-02.route_rules.17
+routes:
+  mysql-replica-02.route_rules.1:
+    schema-pattern: bcex
+    table-pattern: ""
+    target-schema: bcex
+    target-table: ""
+  mysql-replica-02.route_rules.2:
+    schema-pattern: bcex
+    table-pattern: asset_user_locked
+    target-schema: bcex
+    target-table: asset_user_locked
+  mysql-replica-02.route_rules.3:
+    schema-pattern: bcex
+    table-pattern: wallet_user_account
+    target-schema: bcex
+    target-table: wallet_user_account
+  mysql-replica-02.route_rules.4:
+    schema-pattern: bcex
+    table-pattern: asset_user_usable
+    target-schema: bcex
+    target-table: asset_user_usable
+  mysql-replica-02.route_rules.5:
+    schema-pattern: bcex
+    table-pattern: users
+    target-schema: bcex
+    target-table: users
+  mysql-replica-02.route_rules.6:
+    schema-pattern: bcex
+    table-pattern: teller_issue_reward
+    target-schema: bcex
+    target-table: teller_issue_reward
+  mysql-replica-02.route_rules.7:
+    schema-pattern: bcex
+    table-pattern: teller_activity
+    target-schema: bcex
+    target-table: teller_activity
+  mysql-replica-02.route_rules.8:
+    schema-pattern: bcex
+    table-pattern: teller_transfer
+    target-schema: bcex
+    target-table: teller_transfer
+  mysql-replica-02.route_rules.9:
+    schema-pattern: bcex
+    table-pattern: teller_deposit
+    target-schema: bcex
+    target-table: teller_deposit
+  mysql-replica-02.route_rules.10:
+    schema-pattern: bcex
+    table-pattern: teller_user_withdrawal
+    target-schema: bcex
+    target-table: teller_user_withdrawal
+  mysql-replica-02.route_rules.11:
+    schema-pattern: bcex
+    table-pattern: teller_activity_transfer
+    target-schema: bcex
+    target-table: teller_activity_transfer
+  mysql-replica-02.route_rules.12:
+    schema-pattern: bcex
+    table-pattern: teller_fast_transfer_account
+    target-schema: bcex
+    target-table: teller_fast_transfer_account
+  mysql-replica-02.route_rules.13:
+    schema-pattern: bcex
+    table-pattern: teller_issue_donate
+    target-schema: bcex
+    target-table: teller_issue_donate
+  mysql-replica-02.route_rules.14:
+    schema-pattern: bcex
+    table-pattern: teller_adjustment_user_asset
+    target-schema: bcex
+    target-table: teller_adjustment_user_asset
+  mysql-replica-02.route_rules.15:
+    schema-pattern: bcex
+    table-pattern: reconciliation_abnormal_users
+    target-schema: bcex
+    target-table: reconciliation_abnormal_users
+  mysql-replica-02.route_rules.16:
+    schema-pattern: bcex
+    table-pattern: order_trade_fee
+    target-schema: bcex
+    target-table: order_trade_fee
+  mysql-replica-02.route_rules.17:
+    schema-pattern: bcex
+    table-pattern: order_trade
+    target-schema: bcex
+    target-table: order_trade
+black-white-list:
+  global:
+    do-dbs: ["bcex"]
+    do-tables:                        
+    - db-name: bcex
+      tbl-name: order_trade
+    - db-name: bcex
+      tbl-name: order_trade_fee
+    - db-name: bcex
+      tbl-name: asset_user_locked
+    - db-name: bcex
+      tbl-name: wallet_user_account
+    - db-name: bcex
+      tbl-name: asset_user_usable
+    - db-name: bcex
+      tbl-name: users
+    - db-name: bcex
+      tbl-name: teller_issue_reward
+    - db-name: bcex
+      tbl-name: teller_activity
+    - db-name: bcex
+      tbl-name: teller_transfer
+    - db-name: bcex
+      tbl-name: teller_deposit
+    - db-name: bcex
+      tbl-name: teller_user_withdrawal
+    - db-name: bcex
+      tbl-name: teller_activity_transfer
+    - db-name: bcex
+      tbl-name: teller_fast_transfer_account
+    - db-name: bcex
+      tbl-name: teller_issue_donate
+    - db-name: bcex
+      tbl-name: teller_adjustment_user_asset
+    - db-name: bcex
+      tbl-name: reconciliation_abnormal_users
+filters:
+  store-filter-rule:
+    schema-pattern: "store"
+    events: ["drop database", "truncate table", "drop table"]
+    action: Ignore
+
+mydumpers:
+  global:
+    mydumper-path: "./bin/mydumper"
+    threads: 8
+    chunk-filesize: 64
+    skip-tz-utc: true
+    extra-args: -B bcex -T order_trade,order_trade_fee,asset_user_locked,wallet_user_account,asset_user_usable,users,teller_issue_reward,teller_deposit,teller_transfer,teller_activity,teller_user_withdrawal,teller_activity_transfer,teller_fast_transfer_account,teller_issue_donate,teller_adjustment_user_asset,reconciliation_abnormal_users --no-locks
+
+loaders:
+  global:
+    pool-size: 8
+    dir: "./dumped_data"
+
+syncers:
+  global:
+    worker-count: 8
+    batch: 100
+    max-retry: 10
