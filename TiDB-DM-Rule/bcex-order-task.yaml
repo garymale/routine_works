@@ -9,10 +9,10 @@ target-database:
   host: "172.16.12.4"
   port: 4000
   user: "root"
-  password: ""
+  password: "ATfGDN0fNn6pSMk6obZI8ED+ZsKVjzRVBemfD2HCo0k5"
 
 mysql-instances:             
-  - source-id: "mysql-replica-01" 
+  - source-id: "mysql-replica-01"
     black-white-list:  "global"
     mydumper-config-name: "global"
     loader-config-name: "global"
@@ -20,7 +20,7 @@ mysql-instances:
     mydumper-thread: 4
     loader-thread: 16
     syncer-thread: 16
-    filter-rules: []
+    filter-rules: ["order-filter-rule","bcex-filter-rule"]
     route-rules:
     - mysql-replica-01.route_rules.1
     - mysql-replica-01.route_rules.2
@@ -42,9 +42,14 @@ black-white-list:
     - db-name: bcex
       tbl-name: order
 filters:
-  store-filter-rule:
+  order-filter-rule:
     schema-pattern: "bcex"
-    events: ["drop database", "truncate table", "drop table", "delete"]
+    table-pattern: "order"
+    events: ["truncate table", "drop table", "delete"]
+    action: Ignore
+  bcex-filter-rule:
+    schema-pattern: "bcex"
+    events: ["drop database"]
     action: Ignore
 
 mydumpers:
