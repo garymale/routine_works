@@ -39,6 +39,11 @@ mysql-instances:
     - mysql-replica-02.route_rules.15
     - mysql-replica-02.route_rules.16
     - mysql-replica-02.route_rules.17
+    - mysql-replica-02.route_rules.18
+    - mysql-replica-02.route_rules.19
+    - mysql-replica-02.route_rules.20
+    - mysql-replica-02.route_rules.21
+    - mysql-replica-02.route_rules.22
 routes:
   mysql-replica-02.route_rules.1:
     schema-pattern: bcex
@@ -47,9 +52,9 @@ routes:
     target-table: ""
   mysql-replica-02.route_rules.2:
     schema-pattern: bcex
-    table-pattern: asset_user_locked
+    table-pattern: asset_user_sum_locked
     target-schema: bcex
-    target-table: asset_user_locked
+    target-table: asset_user_sum_locked
   mysql-replica-02.route_rules.3:
     schema-pattern: bcex
     table-pattern: wallet_user_account
@@ -112,9 +117,9 @@ routes:
     target-table: teller_adjustment_user_asset
   mysql-replica-02.route_rules.15:
     schema-pattern: bcex
-    table-pattern: reconciliation_abnormal_users
+    table-pattern: reconciliation_asset_user_usable_log
     target-schema: bcex
-    target-table: reconciliation_abnormal_users
+    target-table: reconciliation_asset_user_usable_log
   mysql-replica-02.route_rules.16:
     schema-pattern: bcex
     table-pattern: order_trade_fee
@@ -125,6 +130,31 @@ routes:
     table-pattern: order_trade
     target-schema: bcex
     target-table: order_trade
+  mysql-replica-02.route_rules.18:
+    schema-pattern: bcex
+    table-pattern: notification_org_config
+    target-schema: bcex
+    target-table: notification_org_config
+  mysql-replica-02.route_rules.19:
+    schema-pattern: bcex
+    table-pattern: notification_email_template
+    target-schema: bcex
+    target-table: notification_email_template
+  mysql-replica-02.route_rules.20:
+    schema-pattern: bcex
+    table-pattern: notification_email_template_content
+    target-schema: bcex
+    target-table: notification_email_template_content
+  mysql-replica-02.route_rules.21:
+    schema-pattern: bcex
+    table-pattern: notification_email_log
+    target-schema: bcex
+    target-table: notification_email_log
+  mysql-replica-02.route_rules.22:
+    schema-pattern: bcex
+    table-pattern: market_org_token
+    target-schema: bcex
+    target-table: market_org_token
 black-white-list:
   global:
     do-dbs: ["bcex"]
@@ -134,7 +164,7 @@ black-white-list:
     - db-name: bcex
       tbl-name: order_trade_fee
     - db-name: bcex
-      tbl-name: asset_user_locked
+      tbl-name: asset_user_sum_locked
     - db-name: bcex
       tbl-name: wallet_user_account
     - db-name: bcex
@@ -160,7 +190,17 @@ black-white-list:
     - db-name: bcex
       tbl-name: teller_adjustment_user_asset
     - db-name: bcex
-      tbl-name: reconciliation_abnormal_users
+      tbl-name: reconciliation_asset_user_usable_log
+    - db-name: bcex
+      tbl-name: market_org_token
+    - db-name: bcex
+      tbl-name: notification_org_config
+    - db-name: bcex
+      tbl-name: notification_email_template
+    - db-name: bcex
+      tbl-name: notification_email_template_content
+    - db-name: bcex
+      tbl-name: notification_email_log
 filters:
   bcex-filter-rule:
     schema-pattern: "bcex"
@@ -173,7 +213,7 @@ mydumpers:
     threads: 8
     chunk-filesize: 64
     skip-tz-utc: true
-    extra-args: -B bcex -T order_trade,order_trade_fee,asset_user_locked,wallet_user_account,asset_user_usable,users,teller_issue_reward,teller_deposit,teller_transfer,teller_activity,teller_user_withdrawal,teller_activity_transfer,teller_fast_transfer_account,teller_issue_donate,teller_adjustment_user_asset,reconciliation_abnormal_users --no-locks
+    extra-args: -B bcex -T order_trade,order_trade_fee,asset_user_sum_locked,wallet_user_account,asset_user_usable,users,teller_issue_reward,teller_deposit,teller_transfer,teller_activity,teller_user_withdrawal,teller_activity_transfer,teller_fast_transfer_account,teller_issue_donate,teller_adjustment_user_asset,reconciliation_asset_user_usable_log,market_org_token,notification_org_config,notification_email_template,notification_email_template_content,notification_email_log --no-locks
 
 loaders:
   global:
